@@ -1,0 +1,35 @@
+"@startuml top"
+participant SYS <<Controller>>
+participant images <<Component>>
+participant python
+' participant token <<Store>>
+participant dropbox <<External Server>> #99FF99
+
+SYS -> dropbox: OAuth request
+activate SYS
+dropbox -> SYS: redirect URL
+SYS -> dropbox: generate access token request
+dropbox -> SYS: access token
+' create token
+' SYS -> token: store token
+create images
+SYS -> images: new
+
+activate images
+
+loop
+  images -> images: initialize image list
+  images -> dropbox: get list request
+  dropbox -> images: list
+  alt new image
+    images -> dropbox: download request
+    dropbox -> images: new image
+  end
+  create python
+  images -> python: execute python
+  activate python
+  python -> python: formatting images
+  python -> python: generate json
+
+end
+@enduml

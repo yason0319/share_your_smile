@@ -1,0 +1,24 @@
+{
+  "name": "documents",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "vuepress dev docs",
+    "build": "vuepress build docs",
+    "install": "npm install --save-dev vuepress"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/share-your-smile/documents.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/share-your-smile/documents/issues"
+  },
+  "homepage": "https://github.com/share-your-smile/documents#readme",
+  "devDependencies": {
+    "vuepress": "^1.4.0"
+  }
+}

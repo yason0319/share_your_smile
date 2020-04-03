@@ -1,0 +1,14 @@
+.env
+
+assets/tmp_image/*
+assets/json/*
+
+public/images/*
+public/contest
+public/static
+public/contents
+
+python/config.py
+python/__pycache__/
+
+node_modules/
