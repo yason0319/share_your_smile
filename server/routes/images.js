@@ -143,6 +143,19 @@ class Images {
   }
 
   async mainLoop_start () {
+    // ディレクトリを作成する
+    let paths = [
+      './assets',
+      './assets/tmp_image',
+      './assets/json',
+      './public/images',
+      './public/contest'
+    ]
+    paths.forEach(path => {
+      if (!fs.existsSync(path)) {
+        fs.mkdirSync(path);
+      }
+    })
     imgs.mainLoop()
   }
 
