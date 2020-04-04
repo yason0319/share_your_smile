@@ -38,5 +38,3 @@ FILE_REQUEST_PATH
 ```bash
 npm start
 ```
-
-  access localhost:3000
