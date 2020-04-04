@@ -1,6 +1,6 @@
 # share_your_smile server side
 
-## Quick start
+## setup
 
 1. get dropbox account & app
 
@@ -33,7 +33,7 @@ SESSION_ID_SECRET
 FILE_REQUEST_PATH
 ```
 
-5. start server
+## start server
 
 ```bash
 npm start
