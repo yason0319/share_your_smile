@@ -51,7 +51,6 @@ class Images {
   async getJsonList (req, res) {
     try {
       const jsonObject = JSON.parse(fs.readFileSync('./assets/json/images.json', 'utf8'));
-      console.log('get list')
       res.send(jsonObject)
     } catch {
       res.send({

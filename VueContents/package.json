@@ -9,7 +9,8 @@
     "start": "npm run dev",
     "lint": "eslint --ext .js,.vue src",
     "build": "node build/build.js",
-    "update-contents": "cp -r dist/static ../dropbox_hook_app/public/ ; cp dist/index.html ../dropbox_hook_app/public/contents/"
+    "update-contents": "mkdir ../server/public/contents ; cp -r dist/static ../server/public/ ; cp dist/index.html ../server/public/contents/",
+    "deploy": "npm run build ; npm run update-contents"
   },
   "dependencies": {
     "axios": "^0.19.2",
