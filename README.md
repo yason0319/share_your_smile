@@ -12,11 +12,11 @@ install
 
 ### server side
 
-please refor to the server/README.md
+please refor to the **server/README.md**
 
 ### contents
 
-please refer to the vue-contents/README.md
+please refer to the **vue-contents/README.md**
 
 ## Quick Start
 
