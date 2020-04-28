@@ -12,3 +12,4 @@ python/config.py
 python/__pycache__/
 
 node_modules/
+/coverage/

@@ -8,7 +8,8 @@
     "local-start": "osascript ./openNewTerminal.applescript",
     "load-env": "python setting.py",
     "install": "npm install --save nodemon express body-parser cors python-shell",
-    "del-data": "rm ./assets/json/* ./assets/tmp_image/* ./public/images/* ./public/contest/*"
+    "del-data": "rm ./assets/json/* ./assets/tmp_image/* ./public/images/* ./public/contest/*",
+    "test": "jest  --coverage"
   },
   "dependencies": {
     "body-parser": "^1.19.0",
@@ -32,5 +33,11 @@
   "description": "",
   "main": "app.js",
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "babel-jest": "^25.4.0",
+    "babel-plugin-transform-es2015-modules-commonjs": "^6.26.2",
+    "jest": "^25.4.0",
+    "ts-jest": "^25.4.0"
+  }
 }

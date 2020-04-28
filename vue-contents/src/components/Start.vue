@@ -23,7 +23,6 @@ export default {
     this.counter = 5
     this.isStartCountdown = false
     this.dispCount = this.counter
-    console.log(this.$images_url)
   },
   methods: {
     startSlideShow () {
@@ -49,10 +48,6 @@ export default {
         console.log('start!!')
         this.$router.push({path: '/slide_show'})
       }
-    },
-    countdown () {
-      this.counter = this.counter - 1
-      this.startSlideShow()
     }
   }
 

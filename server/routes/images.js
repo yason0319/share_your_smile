@@ -13,6 +13,10 @@ var {PythonShell} = require('python-shell')
 require('dotenv').config({silent: true});
 
 var counter = 0
+
+function testfunc(a,b) {
+  return a + b
+}
  
 class Lists {
   constructor () {
@@ -216,5 +220,6 @@ router.post('/loop', imgs.mainLoop_api)
  
 module.exports =　{
   router: router,
-  imgs: imgs
+  imgs: imgs,
+  testfunc: testfunc
 }

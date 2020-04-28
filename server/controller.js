@@ -33,7 +33,7 @@ var mycache = new NodeCache();
 
 
 // homeディレクトリ遷移時の処理
-home = async (req, res, next)=>{
+async function home(req, res, next) {
  
   if(!req.session.token){
  
@@ -77,7 +77,7 @@ home = async (req, res, next)=>{
 }
  
 //Redirect from Dropbox
-auth = async(req, res, next)=>{
+async function auth(req, res, next) {
  
   //Dropbox can redirect with some errors
   if(req.query.error_description){
