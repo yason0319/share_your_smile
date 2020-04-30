@@ -78,12 +78,12 @@ export default {
     this.newPost.url = 'url("' + this.$images_url + '寒川 桃香 - IMG_20191221_210847.jpg")'
   },
   beforeDestroy () {
-    console.log('destroy')
     if (this.slideLoop != null) {
+      console.log('slide loop')
       clearInterval(this.slideLoop)
     }
     if (this.newPostLoop != null) {
-      console.log('new post')
+      console.log('new post loop')
       clearInterval(this.newPostLoop)
     }
   },
@@ -91,7 +91,6 @@ export default {
     startSlideShow () {
       this.changeSlide()
       this.getImageJson()
-      console.log('startSlideshow')
       this.isSlideShow = true
       // change slide loop
       this.slideLoop = setInterval(function () { this.changeSlide() }.bind(this), 6000)
@@ -150,7 +149,6 @@ export default {
           return response.json()
         })
         .then(function (data) {
-        // console.log('get image : ' + data.length)
           _self.setImages(data)
         })
     },
@@ -165,24 +163,19 @@ export default {
         var firstShowNum = 0
         if (this.showNumber > this.images.length) {
           firstShowNum = 1
-          console.log('upper')
         } else {
           firstShowNum = this.images.length - this.showNumber + 1
-          console.log('down')
         }
         // 最初に表示するスライドを設定 + 表示枚数以上だった場合、古いものはすべて表示終了に倒す
         for (var arryNum = 0; arryNum < this.images.length; arryNum++) {
           if (this.images[arryNum].post_no === firstShowNum) {
             this.images[arryNum].active = true
             this.showNum = firstShowNum
-            console.log(firstShowNum)
           } else if (this.images[arryNum].post_no < firstShowNum) {
             this.images[arryNum].finishShow = true
           }
         }
-      } else if (this.images.length > 0) { // update images
-        // console.log('now length : ' + this.images.length)
-        // console.log('data length : ' + data.length)
+      } else { // update images
         if (this.images.length < data.length) {
           this.addImages(data)
         }
@@ -213,7 +206,6 @@ export default {
         // images配列へセット + 最低番号以下の画像を非表示にする
         this.setImageInfo(unregisterdImages[indexOfUnregisterdImages])
       }
-      // this.$refs.refNewPost.setNewImageInfo(data[dArryNum])
       this.$refs.refNewPost.setNewImagesInfo(unregisterdImages)
       this.showNewPost()
 
@@ -246,61 +238,14 @@ export default {
       // add image to images
       this.images.push(image)
     },
-    // TODO:同時に複数投稿されるケースを想定し、newPostも配列で持っておく
-    setNewImageInfo (dataImage) {
-      var name = dataImage.title.split(' ')
-      this.newPost.url = 'url("' + this.$images_url + dataImage.src + '")'
-      this.newPost.name.last = name[1]
-      this.newPost.name.first = name[0]
-    },
-    updateDispImage () {
-      // 一番若い番号の要素を削除し、新規の要素を追加する
-      this.totalPostNum = this.images.length + 1
-      for (var iArryNum = 0; iArryNum < this.images.length; iArryNum++) {
-        if (this.images[iArryNum].post_no > this.totalPostNum - this.showNumber) {
-          this.dispImages.push(this.images[iArryNum])
-        }
-      }
-    },
-    prevSlide () {
-      console.log('prev shimasen')
-    },
-    nextSlide () {
-      for (var i = 0; i < this.images.length; i++) {
-        if (this.images[i].active === true) {
-          this.images[i].active = false
-          if (i === this.images.length - 1) {
-            this.images[0].active = true
-          } else {
-            this.images[i + 1].active = true
-          }
-          break
-        }
-      }
-      this.changeAction()
-    },
     showNewPost () { // start new post enter animation
       this.isSlideShow = false
       this.stopSlide()
-      // new post が複数ある場合、全てのスライドを表示し終えてからshowSlideを呼ぶべき。よって、showSlideはnewPostコンポーネント内で呼び出す
-      // setTimeout(function () { this.showSlide() }.bind(this), 4000)
-    },
-    showNewPostFromClick () {
-      var unregisterdImages = []
-      unregisterdImages.push(this.images[0])
-      unregisterdImages.push(this.images[1])
-      this.$refs.refNewPost.setNewImagesInfo(unregisterdImages)
-      this.showNewPost()
-    },
-    showSlide () { // start new post leave animation
-      console.log('restart')
     },
     changeAction () {
-      // $('body').addClass('is-sliding')
       document.body.classList.add('is-sliding')
 
       setTimeout(function () {
-        // $('body').removeClass('is-sliding')
         document.body.classList.remove('is-sliding')
       }, 1000)
     },
@@ -308,6 +253,31 @@ export default {
       clearInterval(this.slideLoop)
       clearInterval(this.newPostLoop)
     }
+    // ,
+    // showNewPostFromClick () {
+    //   var unregisterdImages = []
+    //   unregisterdImages.push(this.images[0])
+    //   unregisterdImages.push(this.images[1])
+    //   this.$refs.refNewPost.setNewImagesInfo(unregisterdImages)
+    //   this.showNewPost()
+    // },
+    // prevSlide () {
+    //   console.log('prev shimasen')
+    // },
+    // nextSlide () {
+    //   for (var i = 0; i < this.images.length; i++) {
+    //     if (this.images[i].active === true) {
+    //       this.images[i].active = false
+    //       if (i === this.images.length - 1) {
+    //         this.images[0].active = true
+    //       } else {
+    //         this.images[i + 1].active = true
+    //       }
+    //       break
+    //     }
+    //   }
+    //   this.changeAction()
+    // }
   }
 }
 </script>

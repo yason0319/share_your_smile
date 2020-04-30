@@ -13,24 +13,8 @@ exec = require('child_process').exec;
  
 //Redirect URL to pass to Dropbox. Has to be whitelisted in Dropbox settings
 const OAUTH_REDIRECT_URL='http://localhost:3000/auth';
-// const OAUTH_REDIRECT_URL=process.env.BASE_URL + 'auth';
-
-// const OAUTH_REDIRECT_URL='https://izurudropbox.herokuapp.com/auth';
- 
-/* componentization of dropbox object [s] */
-//Dropbox configuration
-// const config = {
-//   fetch: fetch,
-//   clientId: process.env.DBX_APP_KEY,
-//   clientSecret: process.env.DBX_APP_SECRET
-// };
- 
-// var dbx = new Dropbox(config);
-/* componentization of dropbox object [e] */
 
 var mycache = new NodeCache();
-
-
 
 // homeディレクトリ遷移時の処理
 async function home(req, res, next) {
