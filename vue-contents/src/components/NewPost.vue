@@ -43,7 +43,7 @@ export default {
         }
       },
       newImages: [],
-      nowShowImageNum: undefined,
+      nowShowImageNum: 0,
       isShowNewImage: false
     }
   },
@@ -51,38 +51,20 @@ export default {
     this.newPost.url = 'url("' + this.$images_url + '寒川 桃香 - IMG_20191221_210847.jpg")'
   },
   methods: {
-    // TODO:同時に複数投稿されるケースを想定し、newPostも配列で持っておく
     // 新規画像配列を受け取る。dataに格納し、まずひとつ目画像をセット
     setNewImagesInfo (newImages) {
-      console.log('set new image')
-      console.log(newImages)
       this.newImages = newImages
 
       // 画像枚数を登録
       this.nowShowImageNum = this.newImages.length
 
-      // 表示画像をセット
-      this.setShowImage()
-
-      // 4s後に、次の画像に切替えるかどうか判定する関数をコールする
-      setTimeout(function () { this.changeImage() }.bind(this), 6000)
-
-      // for (var indexOfNewImages = 0; indexOfNewImages < newImages.length; indexOfNewImages++) {
-
-      // }
+      this.startShowNewPost()
     },
     setShowImage () {
-      if (this.newImages[this.nowShowImageNum - 1].title === undefined) { // for Debug
-        // var name = this.newImages[this.nowShowImageNum - 1].title.split(' ')
-        this.newPost.url = this.newImages[this.nowShowImageNum - 1].url
-        this.newPost.name.last = this.newImages[this.nowShowImageNum - 1].name[1]
-        this.newPost.name.first = this.newImages[this.nowShowImageNum - 1].name[0]
-      } else {
-        var name = this.newImages[this.nowShowImageNum - 1].title.split(' ')
-        this.newPost.url = 'url("' + this.$images_url + this.newImages[this.nowShowImageNum - 1].src + '")'
-        this.newPost.name.last = name[1]
-        this.newPost.name.first = name[0]
-      }
+      var name = this.newImages[this.nowShowImageNum - 1].title.split(' ')
+      this.newPost.url = 'url("' + this.$images_url + this.newImages[this.nowShowImageNum - 1].src + '")'
+      this.newPost.name.last = name[1]
+      this.newPost.name.first = name[0]
 
       // 画像枚数をデクリメント
       this.nowShowImageNum--
@@ -95,13 +77,14 @@ export default {
     },
     afterLeave () { // after finish new post leave animation
       if (this.nowShowImageNum === 0) { // 画像枚数をチェックし、0なら表示終了
-        console.log('after leave')
         this.$emit('startSlideShow')
       } else { // 次の画像表示準備
-        this.setShowImage()
-        // 4s後に、次の画像に切替えるかどうか判定する関数をコールする
-        setTimeout(function () { this.changeImage() }.bind(this), 4000)
+        this.startShowNewPost()
       }
+    },
+    startShowNewPost () {
+      this.setShowImage()
+      setTimeout(function () { this.changeImage() }.bind(this), 4000)
     }
   }
 }
