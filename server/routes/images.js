@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-var dbx = require('../components/dropbox').dbx;
+var dbx = require('../components/cusDropbox')
 const controller = require('../controller');
 const tokenclass = require('../components/token').token;
 const fs = require('fs');
@@ -39,7 +39,6 @@ class Images {
 
   post (req, res) {
     var token = tokenclass.getAccessToken()
-    console.log('token : ' + token)
     res.send({
       token: token,
       reply: 'hello'

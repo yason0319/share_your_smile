@@ -5,13 +5,11 @@ class Token {
   }
 
   getAccessToken() {
-    // console.log('token is ' + this.access_token)
     return this.access_token;
   }
 
   setAccessToken(token) {
     this.access_token = token
-    console.log('set token : ' + this.access_token)
   }
 }
 

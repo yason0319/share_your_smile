@@ -4,7 +4,7 @@ NodeCache = require( "node-cache" ),
 /* componentization of dropbox object [s] */
 // Dropbox = require('dropbox').Dropbox,
 // fetch = require('isomorphic-fetch');
-dbx = require('./components/dropbox').dbx,
+dbx = require('./components/cusDropbox'),
 tokenclass = require('./components/token').token,
 cron = require('node-cron'),
 imgs = require('./routes/images').imgs,
@@ -18,6 +18,8 @@ var mycache = new NodeCache();
 
 // homeディレクトリ遷移時の処理
 async function home(req, res, next) {
+
+  console.log(req.session)
  
   if(!req.session.token){
  
@@ -28,7 +30,7 @@ async function home(req, res, next) {
     mycache.set(state, req.session.id, 6000);
 
     //get authentication URL and redirect
-    authUrl = dbx.getAuthenticationUrl(OAUTH_REDIRECT_URL, state, 'code');
+    var authUrl = dbx.getAuthenticationUrl(OAUTH_REDIRECT_URL, state, 'code');
     res.redirect(authUrl);
    
   } else {
@@ -70,10 +72,12 @@ async function auth(req, res, next) {
  
   //validate state ensuring there is a session id associated with it
   let state= req.query.state;
+  console.log(state)
   if(!mycache.get(state)){
     return next(new Error("session expired or invalid state"));
   }
  
+  console.log('code : ' + req.query.code)
   //Exchange code for token
   if(req.query.code){
 
@@ -82,6 +86,7 @@ async function auth(req, res, next) {
  
       //store token and invalidate state
       req.session.token = token;
+      console.log(req.session.token)
       tokenclass.setAccessToken(token)
       mycache.del(state);
  
