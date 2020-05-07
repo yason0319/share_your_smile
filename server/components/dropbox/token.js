@@ -13,8 +13,6 @@ class Token {
   }
 }
 
-var tokenclass = new Token();
+var token = new Token();
 
-module.exports = {
-  token: tokenclass
-}
+module.exports = token

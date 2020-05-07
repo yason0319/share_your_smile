@@ -9,7 +9,7 @@
     "load-env": "python setting.py",
     "install": "npm install --save nodemon express body-parser cors python-shell",
     "del-data": "rm ./assets/json/* ./assets/tmp_image/* ./public/images/* ./public/contest/*",
-    "test": "jest  --coverage"
+    "test": "NODE_ENV=test jest  --coverage"
   },
   "dependencies": {
     "body-parser": "^1.19.0",

@@ -18,12 +18,17 @@ function __setMockFiles(newMockFiles) {
     }
     mockFiles[dir].push(path.basename(file))
   }
+  console.log(mockFiles)
 }
 
 // A custom version of `readdirSync` that reads from the special mocked out
 // file list set via __setMockFiles
 function readdirSync(directoryPath) {
   return mockFiles[directoryPath] || []
+}
+
+function readFileSync(directoryPath) {
+  return mockFiles[directoryPath]
 }
 
 function existsSync(directoryPath) {
@@ -42,5 +47,6 @@ fs.__setMockFiles = __setMockFiles
 fs.readdirSync = readdirSync
 fs.existsSync = existsSync
 fs.mkdirSync = mkdirSync
+fs.readFileSync = readFileSync
 
 module.exports = fs;

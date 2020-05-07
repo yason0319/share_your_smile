@@ -32,19 +32,25 @@ class Dropbox {
     var response = {
       entries: [
         {
-          name: 'John Doe'
+          name: 'John Doe 1.jpg'
         },
         {
-          name: 'John Doe2'
+          name: 'John Doe 2.jpg'
         }
       ]
     }
-    return new Promise(resolve => {
-      return response
+    return new Promise((resolve, reject) => {
+      resolve(response)
     })
   }
 
   filesDownload(path) {
+    var response = {
+      fileBinary: 'pepepe'
+    }
+    return new Promise((resolve, reject) => {
+      resolve(response)
+    })
 
   }
 }

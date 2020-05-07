@@ -4,26 +4,44 @@ const request = require('supertest')
 
 // モックファイルを指定するのではなく、もとのファイルを指定する。
 // モックファイルとの紐付けはjestがやってくれる。
-// jest.mock('fs')
-jest.mock('../components/cusDropbox')
+jest.mock('../components/dropbox/cusDropbox')
 
-describe('image api', () => {
+describe('start server', () => {
   var state = ''
 
-  const agent = request.agent(app)
+  jest.mock('../routes/images')
 
-  // const MOCK_FILE_INFO = {
-  //   '/path/to/file1.js': 'console.log("file1 contents");',
-  //   '/path/to/file2.txt': 'file2 contents',
-  // };
+  const MOCK_FILE_INFO = {
+    './assets/json/images.json': 'console.log("file1 contents");',
+    './assets/tmp_image/John Doe 1.jpg': 'john doe 1',
+    './assets/tmp_image/John Doe 2.jpg': 'john doe 2'
+  };
+
+  const OLD_ENV = process.env;
 
   // beforeEach(() => {
   //   // Set up some mocked out file info before each test
-  //   require('fs').__setMockFiles(MOCK_FILE_INFO);
+  //   // require('fs').__setMockFiles(MOCK_FILE_INFO);
+
+  //   // jest.resetModules() // this is important - it clears the cache
+  //   // process.env = { ...OLD_ENV };
+  //   // delete process.env.NODE_ENV;
+
+  //   // process.env.SESSION_ID_SECRET = 'nandemoiiyo'
+  //   // const testedModule = require('../../config/env').default
+
   // });
+
+  // afterEach(() => {
+  //   process.env = OLD_ENV;
+  // });
+
+  const agent = request.agent(app)
 
   it('redirect to dropbox for OAuth before start server', async function(done) {
     // console.log(dbx.getAccessTokenFromCode)
+    
+    console.log('start!!!!')
     const response = await agent.get('/')
     // console.log(response.header)
     state = response.text.split('state=')[1]
@@ -42,13 +60,17 @@ describe('image api', () => {
     done()
   })
 
+  // 画像を取得するループ処理開始関数をモック化したい
   it('start server', async function(done) {
     const response = await agent.get('/')
     expect(response.statusCode).toBe(302)
     done()
   })
+})
 
+describe('images api', () => {
   it('images post', async () => {
+    jest.mock('fs')
     const response = await request(app).post('/images/')
     expect(response.statusCode).toBe(200)
     expect(response.body.reply).toBe('hello')
@@ -75,13 +97,4 @@ describe('image api', () => {
     expect(response.statusCode).toBe(200)
   })
 
-  // it('OAuth start with token', () => {
-  //   var req = request(app).get('/')
-  //   req.session.token = 'hogehoge'
-  //   req.expect('Content-Type', /json/)
-  //     .expect(200)
-  //     .end(function (err, res) {
-  //       expect(res.statusCode).toBe(302)
-  //   })
-  // })
 })

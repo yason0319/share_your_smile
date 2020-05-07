@@ -1,9 +1,8 @@
-var express = require('express');
-var router = express.Router();
-var dbx = require('../components/cusDropbox')
-const controller = require('../controller');
-const tokenclass = require('../components/token').token;
-const fs = require('fs');
+var express = require('express')
+var router = express.Router()
+var dbx = require('../dropbox/cusDropbox')
+const dbxtoken = require('../dropbox/token')
+const fs = require('fs')
 const execSync = require('child_process').execSync;
 
 var {PythonShell} = require('python-shell')
@@ -38,7 +37,7 @@ class Images {
   }
 
   post (req, res) {
-    var token = tokenclass.getAccessToken()
+    var token = dbxtoken.getAccessToken()
     res.send({
       token: token,
       reply: 'hello'
@@ -49,6 +48,10 @@ class Images {
     res.send({
       reply: 'this only test'
     })
+  }
+
+  testfunc (a, b) {
+    return a + b
   }
 
   async getJsonList (req, res) {
@@ -73,24 +76,9 @@ class Images {
     }
   }
 
-  async getList_api (req, res) {
-    console.log('start')
-    try {
-      await imgs.getList()
-      res.send({
-        ok: true
-      })
-    } catch {
-      res.send({
-        error: 'something happened'
-      })
-    }
-  }
-
-
   // get list of images in file_request folder
   async getList () {
-    var token = tokenclass.getAccessToken()
+    var token = dbxtoken.getAccessToken()
     dbx.setAccessToken(token);
 
     await dbx.filesListFolder({path: process.env.FILE_REQUEST_PATH})
@@ -112,7 +100,7 @@ class Images {
     var download_to = './assets/tmp_image/' + lists.imgLists[index]
     // 既にファイルがあれば、APIコールしない
     if (fs.existsSync(download_to) === false) {
-      var token = tokenclass.getAccessToken()
+      var token = dbxtoken.getAccessToken()
       await dbx.setAccessToken(token);
       await dbx.filesDownload({path: download_from})
       .then(function(response) {
@@ -124,8 +112,6 @@ class Images {
         dbx.setAccessToken(null);
         console.log(error)
       })
-    } else {
-      // console.log('api not called')
     }
   }
 
@@ -217,8 +203,4 @@ router.post('/contest/get_list', imgs.getContestJsonList)
 router.post('/get', imgs.showLists)
 router.post('/loop', imgs.mainLoop_api)
  
-module.exports =　{
-  router: router,
-  imgs: imgs,
-  testfunc: testfunc
-}
+module.exports = imgs

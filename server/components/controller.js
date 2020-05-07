@@ -1,15 +1,11 @@
 const 
 crypto = require('crypto'),
 NodeCache = require( "node-cache" ),
-/* componentization of dropbox object [s] */
-// Dropbox = require('dropbox').Dropbox,
-// fetch = require('isomorphic-fetch');
-dbx = require('./components/cusDropbox'),
-tokenclass = require('./components/token').token,
+dbx = require('./dropbox/cusDropbox'),
+dbxtoken = require('./dropbox/token'),
 cron = require('node-cron'),
-imgs = require('./routes/images').imgs,
+imgs = require('./images/images'),
 exec = require('child_process').exec;
-/* componentization of dropbox object [e] */
  
 //Redirect URL to pass to Dropbox. Has to be whitelisted in Dropbox settings
 const OAUTH_REDIRECT_URL='http://localhost:3000/auth';
@@ -25,12 +21,17 @@ async function home(req, res, next) {
  
     //create a random state value
     let state = crypto.randomBytes(16).toString('hex');
+
+    console.log('state : ' + state)
  
     //Save state and the session id for 10 mins
     mycache.set(state, req.session.id, 6000);
 
     //get authentication URL and redirect
     var authUrl = dbx.getAuthenticationUrl(OAUTH_REDIRECT_URL, state, 'code');
+    
+    console.log(authUrl)
+
     res.redirect(authUrl);
    
   } else {
@@ -87,7 +88,7 @@ async function auth(req, res, next) {
       //store token and invalidate state
       req.session.token = token;
       console.log(req.session.token)
-      tokenclass.setAccessToken(token)
+      dbxtoken.setAccessToken(token)
       mycache.del(state);
  
       res.redirect('/');

@@ -11,6 +11,7 @@ module.exports = {
     'json'
   ], // テスト対象の拡張子を列挙する
   setupFiles: [
-    './setupJest.js'
+    './setupJest.js',
+    'dotenv/config'
   ]
 };
