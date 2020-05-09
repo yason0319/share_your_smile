@@ -12,10 +12,6 @@ var {PythonShell} = require('python-shell')
 require('dotenv').config({silent: true});
 
 var counter = 0
-
-function testfunc(a,b) {
-  return a + b
-}
  
 class Lists {
   constructor () {
@@ -38,9 +34,11 @@ class Images {
 
   post (req, res) {
     var token = dbxtoken.getAccessToken()
+    var text = fs.readFileSync('./assets/json/test.txt','utf8')
     res.send({
       token: token,
-      reply: 'hello'
+      reply: 'hello',
+      text: text
     })
   }
 
@@ -50,15 +48,13 @@ class Images {
     })
   }
 
-  testfunc (a, b) {
-    return a + b
-  }
-
   async getJsonList (req, res) {
     try {
       const jsonObject = JSON.parse(fs.readFileSync('./assets/json/images.json', 'utf8'));
+      res.status(200)
       res.send(jsonObject)
     } catch {
+      res.status(500)
       res.send({
         error: 'something happened'
       })
@@ -68,8 +64,10 @@ class Images {
   async getContestJsonList (req, res) {
     try {
       const jsonObject = JSON.parse(fs.readFileSync('./assets/json/contest.json', 'utf8'));
+      res.status(200)
       res.send(jsonObject)
     } catch {
+      res.status(500)
       res.send({
         error: 'something happened'
       })
@@ -84,6 +82,7 @@ class Images {
     await dbx.filesListFolder({path: process.env.FILE_REQUEST_PATH})
     .then(function(response) {
       response.entries.forEach(entry => {
+        console.log(entry)
         lists.addList(entry.name)
       })
       dbx.setAccessToken(null);
@@ -113,21 +112,6 @@ class Images {
         console.log(error)
       })
     }
-  }
-
-  async mainLoop_api (req, res) {
-    console.log('start')
-    try {
-      await imgs.mainLoop()
-      res.send({
-        ok: true
-      })
-    } catch {
-      res.send({
-        error: 'something happened'
-      })
-    }
-
   }
 
   async mainLoop_start () {
@@ -173,6 +157,7 @@ class Images {
 
   showLists (req, res) {
     var show_lists = []
+    console.log(lists.imgLists)
     lists.imgLists.forEach(list => {
       var tmp = { LIST: list }
       show_lists.push(tmp)
@@ -201,6 +186,5 @@ router.post('/get_list', imgs.getJsonList)
 router.post('/contest/get_list', imgs.getContestJsonList)
 // router.post('/image/*', imgs.getImage)
 router.post('/get', imgs.showLists)
-router.post('/loop', imgs.mainLoop_api)
  
 module.exports = imgs
