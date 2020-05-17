@@ -1,5 +1,14 @@
 # share_your_smile
 
+## description
+
+Dropbox連携リアルタイムスライドショーアプリ。
+
+Dropboxのファイルリクエスト機能を使ってアップロードしてもらった画像を、
+リアルタイムでスライド投影させます。
+
+コンテスト機能も搭載。
+
 ## setup
 
 ### Advance preparation
