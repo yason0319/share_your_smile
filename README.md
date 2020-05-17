@@ -1,4 +1,4 @@
-# share_your_smile
+# share-your-smile
 
 ## description
 
