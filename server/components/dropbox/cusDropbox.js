@@ -11,6 +11,4 @@ const config = {
  
 var dbx = new Dropbox(config);
 
-module.exports = {
-  dbx: dbx
-}
+module.exports = dbx

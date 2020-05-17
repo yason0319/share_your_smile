@@ -1,9 +1,8 @@
-var express = require('express');
-var router = express.Router();
-var dbx = require('../components/dropbox').dbx;
-const controller = require('../controller');
-const tokenclass = require('../components/token').token;
-const fs = require('fs');
+var express = require('express')
+var router = express.Router()
+var dbx = require('../dropbox/cusDropbox')
+const dbxtoken = require('../dropbox/token')
+const fs = require('fs')
 const execSync = require('child_process').execSync;
 
 var {PythonShell} = require('python-shell')
@@ -13,10 +12,6 @@ var {PythonShell} = require('python-shell')
 require('dotenv').config({silent: true});
 
 var counter = 0
-
-function testfunc(a,b) {
-  return a + b
-}
  
 class Lists {
   constructor () {
@@ -38,11 +33,12 @@ class Images {
   }
 
   post (req, res) {
-    var token = tokenclass.getAccessToken()
-    console.log('token : ' + token)
+    var token = dbxtoken.getAccessToken()
+    var text = fs.readFileSync('./assets/json/test.txt','utf8')
     res.send({
       token: token,
-      reply: 'hello'
+      reply: 'hello',
+      text: text
     })
   }
 
@@ -55,8 +51,10 @@ class Images {
   async getJsonList (req, res) {
     try {
       const jsonObject = JSON.parse(fs.readFileSync('./assets/json/images.json', 'utf8'));
+      res.status(200)
       res.send(jsonObject)
     } catch {
+      res.status(500)
       res.send({
         error: 'something happened'
       })
@@ -66,44 +64,32 @@ class Images {
   async getContestJsonList (req, res) {
     try {
       const jsonObject = JSON.parse(fs.readFileSync('./assets/json/contest.json', 'utf8'));
+      res.status(200)
       res.send(jsonObject)
     } catch {
+      res.status(500)
       res.send({
         error: 'something happened'
       })
     }
   }
-
-  async getList_api (req, res) {
-    console.log('start')
-    try {
-      await imgs.getList()
-      res.send({
-        ok: true
-      })
-    } catch {
-      res.send({
-        error: 'something happened'
-      })
-    }
-  }
-
 
   // get list of images in file_request folder
   async getList () {
-    var token = tokenclass.getAccessToken()
+    var token = dbxtoken.getAccessToken()
     dbx.setAccessToken(token);
 
     await dbx.filesListFolder({path: process.env.FILE_REQUEST_PATH})
     .then(function(response) {
+      
       response.entries.forEach(entry => {
+        // console.log(entry)
         lists.addList(entry.name)
       })
-      dbx.setAccessToken(null);
+      dbx.setAccessToken(null)
     })
     .catch(function(error) {
-      dbx.setAccessToken(null);
-      console.log(error)
+      dbx.setAccessToken(null)
     });
   }
 
@@ -113,36 +99,18 @@ class Images {
     var download_to = './assets/tmp_image/' + lists.imgLists[index]
     // 既にファイルがあれば、APIコールしない
     if (fs.existsSync(download_to) === false) {
-      var token = tokenclass.getAccessToken()
-      await dbx.setAccessToken(token);
+      var token = dbxtoken.getAccessToken()
+      await dbx.setAccessToken(token)
       await dbx.filesDownload({path: download_from})
       .then(function(response) {
         fs.writeFileSync(download_to, new Buffer.from(response.fileBinary), 'binary');
-        console.log('download done')
-        dbx.setAccessToken(null);
+        // console.log('download done')
+        dbx.setAccessToken(null)
       })
       .catch(function(error) {
-        dbx.setAccessToken(null);
-        console.log(error)
-      })
-    } else {
-      // console.log('api not called')
-    }
-  }
-
-  async mainLoop_api (req, res) {
-    console.log('start')
-    try {
-      await imgs.mainLoop()
-      res.send({
-        ok: true
-      })
-    } catch {
-      res.send({
-        error: 'something happened'
+        dbx.setAccessToken(null)
       })
     }
-
   }
 
   async mainLoop_start () {
@@ -198,11 +166,10 @@ class Images {
   // execcute python
   async makeJsonSlideImage () {
     // execute by shellcommand
-
     // execute by python-shell < better method
     await PythonShell.run('./python/start.py', null, function (err) {
-      if (err) throw err;
-    });
+      if (err) throw err
+    })
   }
   
 }
@@ -216,10 +183,5 @@ router.post('/get_list', imgs.getJsonList)
 router.post('/contest/get_list', imgs.getContestJsonList)
 // router.post('/image/*', imgs.getImage)
 router.post('/get', imgs.showLists)
-router.post('/loop', imgs.mainLoop_api)
  
-module.exports =　{
-  router: router,
-  imgs: imgs,
-  testfunc: testfunc
-}
+module.exports = imgs

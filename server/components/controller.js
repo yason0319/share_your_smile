@@ -1,18 +1,14 @@
 const 
 crypto = require('crypto'),
 NodeCache = require( "node-cache" ),
-/* componentization of dropbox object [s] */
-// Dropbox = require('dropbox').Dropbox,
-// fetch = require('isomorphic-fetch');
-dbx = require('./components/dropbox').dbx,
-tokenclass = require('./components/token').token,
+dbx = require('./dropbox/cusDropbox'),
+dbxtoken = require('./dropbox/token'),
 cron = require('node-cron'),
-imgs = require('./routes/images').imgs,
-exec = require('child_process').exec;
-/* componentization of dropbox object [e] */
+imgs = require('./images/images'),
+exec = require('child_process').exec
  
 //Redirect URL to pass to Dropbox. Has to be whitelisted in Dropbox settings
-const OAUTH_REDIRECT_URL='http://localhost:3000/auth';
+const OAUTH_REDIRECT_URL='http://localhost:3000/auth'
 
 var mycache = new NodeCache();
 
@@ -23,12 +19,13 @@ async function home(req, res, next) {
  
     //create a random state value
     let state = crypto.randomBytes(16).toString('hex');
- 
+
     //Save state and the session id for 10 mins
     mycache.set(state, req.session.id, 6000);
 
     //get authentication URL and redirect
-    authUrl = dbx.getAuthenticationUrl(OAUTH_REDIRECT_URL, state, 'code');
+    var authUrl = dbx.getAuthenticationUrl(OAUTH_REDIRECT_URL, state, 'code');
+
     res.redirect(authUrl);
    
   } else {
@@ -38,7 +35,6 @@ async function home(req, res, next) {
  
     try{
       let account_details = await dbx.usersGetCurrentAccount();
-      console.log(account_details)
       let display_name = account_details.name.display_name;
       dbx.setAccessToken(null); //clean up token
  
@@ -46,10 +42,6 @@ async function home(req, res, next) {
 
       // start observer sequence
       imgs.mainLoop_start()
-      // start python script
-      // exec('python ./python/start.py', (err, stdout, stderr) => {
-      //   if (err) { console.log(err); }
-      // });
 
       res.redirect('/contents')
  
@@ -82,7 +74,7 @@ async function auth(req, res, next) {
  
       //store token and invalidate state
       req.session.token = token;
-      tokenclass.setAccessToken(token)
+      dbxtoken.setAccessToken(token)
       mycache.del(state);
  
       res.redirect('/');
@@ -90,6 +82,8 @@ async function auth(req, res, next) {
     }catch(error){
       return next(error);
     }
+  } else {
+    return next(new Error('there is no parameter code in query'))
   }
 }
 
