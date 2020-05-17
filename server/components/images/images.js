@@ -81,15 +81,15 @@ class Images {
 
     await dbx.filesListFolder({path: process.env.FILE_REQUEST_PATH})
     .then(function(response) {
+      
       response.entries.forEach(entry => {
-        console.log(entry)
+        // console.log(entry)
         lists.addList(entry.name)
       })
-      dbx.setAccessToken(null);
+      dbx.setAccessToken(null)
     })
     .catch(function(error) {
-      dbx.setAccessToken(null);
-      console.log(error)
+      dbx.setAccessToken(null)
     });
   }
 
@@ -100,16 +100,15 @@ class Images {
     // 既にファイルがあれば、APIコールしない
     if (fs.existsSync(download_to) === false) {
       var token = dbxtoken.getAccessToken()
-      await dbx.setAccessToken(token);
+      await dbx.setAccessToken(token)
       await dbx.filesDownload({path: download_from})
       .then(function(response) {
         fs.writeFileSync(download_to, new Buffer.from(response.fileBinary), 'binary');
-        console.log('download done')
-        dbx.setAccessToken(null);
+        // console.log('download done')
+        dbx.setAccessToken(null)
       })
       .catch(function(error) {
-        dbx.setAccessToken(null);
-        console.log(error)
+        dbx.setAccessToken(null)
       })
     }
   }
@@ -157,7 +156,6 @@ class Images {
 
   showLists (req, res) {
     var show_lists = []
-    console.log(lists.imgLists)
     lists.imgLists.forEach(list => {
       var tmp = { LIST: list }
       show_lists.push(tmp)
@@ -168,11 +166,10 @@ class Images {
   // execcute python
   async makeJsonSlideImage () {
     // execute by shellcommand
-
     // execute by python-shell < better method
     await PythonShell.run('./python/start.py', null, function (err) {
-      if (err) throw err;
-    });
+      if (err) throw err
+    })
   }
   
 }

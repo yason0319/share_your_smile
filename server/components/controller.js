@@ -35,7 +35,6 @@ async function home(req, res, next) {
  
     try{
       let account_details = await dbx.usersGetCurrentAccount();
-      console.log(account_details)
       let display_name = account_details.name.display_name;
       dbx.setAccessToken(null); //clean up token
  
@@ -83,6 +82,8 @@ async function auth(req, res, next) {
     }catch(error){
       return next(error);
     }
+  } else {
+    return next(new Error('there is no parameter code in query'))
   }
 }
 

@@ -13,5 +13,17 @@ module.exports = {
   setupFiles: [
     './setupJest.js',
     'dotenv/config'
-  ]
+  ],
+  coveragePathIgnorePatterns: [
+    'app.js'
+  ],
+  globals: {
+    '__pyshell__': true,
+    '__dbx__' : {
+      'user' : true,
+      'token' : true,
+      'fileList' : true,
+      'download' : true
+    }
+  }
 };

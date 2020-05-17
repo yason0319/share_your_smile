@@ -38,7 +38,18 @@ function readFileSync(directoryPath) {
 }
 
 function existsSync(directoryPath) {
-  if (mockFiles[directoryPath]) {
+  const fileName = path.basename(directoryPath)
+  let isDownload = false
+  // console.log(fileName)
+  const imagePath = './assets/tmp_image'
+  // console.log(mockFiles[imagePath])
+  mockFiles[imagePath].forEach(file => {
+    // console.log(file)
+    if (file == fileName) {
+      isDownload = true
+    }
+  })
+  if (mockFiles[directoryPath] || isDownload) {
     return true
   } else {
     return false

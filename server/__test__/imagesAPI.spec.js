@@ -21,14 +21,18 @@ describe('images api', () => {
     './assets/json/test.txt': 'jest is complicated!'
   };
 
-  // beforeEach(() => {
+  beforeEach(() => {
     // Set up some mocked out file info before each test
     require('fs').__setMockFiles(MOCK_FILE_INFO);
-  // });
+  })
+
+  afterEach(() => {
+    require('fs').__removeMockFiles()
+  })
 
   it('images post', async () => {
     const response = await agent.post('/images/')
-    console.log(response.body)
+    // console.log(response.body)
     expect(response.statusCode).toBe(200)
     expect(response.body.reply).toBe('hello')
   })
@@ -41,7 +45,7 @@ describe('images api', () => {
 
   it('get list', async () => {
     const response = await agent.post('/images/get_list')
-    console.log(response.body)
+    expect(response.body.test).toBe('json')
     expect(response.statusCode).toBe(200)
   })
 
@@ -51,23 +55,30 @@ describe('images api', () => {
   })
 
   it('get', async () => {
+    // リストデータを登録しておく必要がある
+    require('../components/images/images').getList()
     const response = await agent.post('/images/get')
     expect(response.statusCode).toBe(200)
   })
-
 })
 
 describe('error cases', () => {
-  // const MOCK_FILE_INFO2 = {
-  //   './assets/': 'undefined'
-  // }
+  const MOCK_FILE_INFO2 = {
+    './assets/': 'undefined'
+  }
 
-  // require('fs').__removeMockFiles()
+  beforeEach(() => {
+    // Set up some mocked out file info before each test
+    require('fs').__setMockFiles(MOCK_FILE_INFO2)
+  })
+
+  afterEach(() => {
+    require('fs').__removeMockFiles()
+  })
   
   it('get list', async () => {
-    require('fs').__removeMockFiles()
     const response = await agent.post('/images/get_list')
-    console.log(response.body)
+    // console.log(response.body)
     expect(response.statusCode).toBe(500)
   })
 
