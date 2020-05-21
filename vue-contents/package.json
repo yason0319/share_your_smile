@@ -11,7 +11,8 @@
     "build": "node build/build.js",
     "update-contents": "mkdir ../server/public/contents ; cp -r dist/static ../server/public/ ; cp dist/index.html ../server/public/contents/",
     "deploy": "npm run build ; npm run update-contents",
-    "test": "jest --coverage"
+    "test": "jest --coverage",
+    "cypress:open": "cypress open"
   },
   "dependencies": {
     "axios": "^0.19.2",
@@ -36,6 +37,7 @@
     "chalk": "^2.0.1",
     "copy-webpack-plugin": "^4.0.1",
     "css-loader": "^0.28.0",
+    "cypress": "^4.5.0",
     "eslint": "^4.15.0",
     "eslint-config-standard": "^10.2.1",
     "eslint-friendly-formatter": "^3.0.0",
@@ -72,7 +74,8 @@
     "vue-template-compiler": "^2.5.2",
     "webpack": "^3.6.0",
     "webpack-bundle-analyzer": "^3.3.2",
-    "webpack-dev-server": "^3.1.11",
+    "webpack-cli": "^3.3.11",
+    "webpack-dev-server": "^3.0.0",
     "webpack-merge": "^4.1.0"
   },
   "engines": {
