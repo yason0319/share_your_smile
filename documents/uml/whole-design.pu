@@ -1,0 +1,51 @@
+@startuml
+
+' package "participant" as part {
+'   actor "A" as partA
+' }
+actor "参加者" as part
+
+node "フロントエンド" as cb {
+  [slide show]
+}
+
+node "アプリサーバー" as cs {
+  ' [get photos]
+  ' [cast photos]
+  interface "api" as asapi
+  database "casted photos" as phts {
+  }
+  ' コンポーネントの下にデータベースを置く
+  
+}
+
+node "Dropbox" as db {
+  interface "api" as dapi
+  ' folder "file request folder" as frf {
+  '   [photos]
+  ' }
+  database "file request folder" {
+    [photos]
+  }
+  ' dapi -[hidden]- frf
+}
+
+' 配置
+db -[hidden]do- cs
+cb -[hidden]ri- cs
+part -[hidden]do- cb
+part -[hidden]ri- db
+asapi -[hidden]ri- phts
+
+[slide show] -> asapi
+part -> dapi: upload photos
+cs -> dapi: get uploaded photos
+' cs -> phts: cast photos
+
+
+' [get photos] - dapi
+' [slide show] -> phts
+' [get photos] -> [cast photos]
+' [cast photos] -> phts
+' dapi - frf
+@enduml

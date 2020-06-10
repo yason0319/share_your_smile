@@ -1,0 +1,14 @@
+@startuml
+Browser -> Server: access start page
+Server -> Server: generate auth server URL
+Server -> Browser: auth server URL
+Browser -> Dropbox: access auth server
+Dropbox -> Browser: authorize
+Dropbox -> Browser: redirect URL
+Browser -> Server: access redirect URL
+Server -> Dropbox: request generate token
+Dropbox -> Server: token
+Server -> Server: save token
+Server -> Browser: redirect request
+Browser -> Server: access start page
+@enduml

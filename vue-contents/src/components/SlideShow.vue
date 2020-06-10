@@ -75,7 +75,6 @@ export default {
   },
   mounted () {
     this.startSlideShow()
-    this.newPost.url = 'url("' + this.$images_url + '寒川 桃香 - IMG_20191221_210847.jpg")'
   },
   beforeDestroy () {
     if (this.slideLoop != null) {
