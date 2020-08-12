@@ -33,7 +33,6 @@ describe('update images loop', () => {
     const spy = jest.spyOn(images, 'mainLoop')
       .mockImplementation(() => {
         return true
-        // throw 'fuckin error'
       })
     const loopStart = images.mainLoop()
     await images.mainLoop_start()
@@ -53,33 +52,11 @@ describe('update images loop', () => {
   })
 
   it('python shell exec fail', async () => {
-    // const {PythonShell} = require('python-shell')
-    // PythonShell.__setCount(1)
     global.__pyshell__ = false
     try {
       await images.makeJsonSlideImage()
     } catch(err) {
       expect(err).toBe('error occured')
     }
-    // expect(response).toThrowError('error occured')
   })
 })
-
-// describe('error cases', () => {
-//   const MOCK_FILE_INFO2 = {
-//     './assets/': 'undefined'
-//   }
-
-//   beforeEach(() => {
-//     // Set up some mocked out file info before each test
-//     require('fs').__setMockFiles(MOCK_FILE_INFO2)
-//   })
-
-//   afterEach(() => {
-//     require('fs').__removeMockFiles()
-//   })
-  
-//   it('get list', async () => {
-//     await images.download()
-//   })
-// })

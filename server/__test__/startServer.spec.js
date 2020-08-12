@@ -6,7 +6,6 @@ import imagesMock from '../components/images/images'
 // モックファイルを指定するのではなく、もとのファイルを指定する。
 // モックファイルとの紐付けはjestがやってくれる。
 jest.mock('../components/dropbox/cusDropbox')
-// jest.mock('../components/images/images')
 
 const agent = request.agent(app)
 const subAgent = request.agent(app)
@@ -29,7 +28,7 @@ describe('start server', () => {
   });
 
   it('OAuth認証失敗：リダイレクトURLのクエリにerror_descriptionパラメータが付与される', async function(done) {
-    var error_description = 'unkomaru'
+    var error_description = 'errordayo'
     var uri = '/auth?error_description=' + error_description
     const response = await agent.get(uri)
     expect(response.statusCode).toBe(500)
@@ -83,7 +82,6 @@ describe('start server', () => {
     const spy = jest.spyOn(imagesMock, 'mainLoop_start')
       .mockImplementation(() => {
         return true
-        // throw 'fuckin error'
       })
     const loopStart = imagesMock.mainLoop_start()
 

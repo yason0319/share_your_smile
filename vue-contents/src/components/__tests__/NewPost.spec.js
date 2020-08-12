@@ -31,7 +31,6 @@ describe('NewPost Componet', () => {
         $images_list_url: '/images_list_url'
       }
     })
-    wrapper.vm.$emit('foo')
   })
 
   it('is a Vue instance', () => {
@@ -49,6 +48,6 @@ describe('NewPost Componet', () => {
       }
       postNum--
     } while (postNum >= 0)
-    expect(wrapper.emitted('foo')).toBeTruthy()
+    expect(wrapper.emitted('startSlideShow')).toBeTruthy()
   })
 })

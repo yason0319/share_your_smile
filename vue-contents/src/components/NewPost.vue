@@ -47,9 +47,6 @@ export default {
       isShowNewImage: false
     }
   },
-  mounted: function () {
-    this.newPost.url = 'url("' + this.$images_url + '寒川 桃香 - IMG_20191221_210847.jpg")'
-  },
   methods: {
     // 新規画像配列を受け取る。dataに格納し、まずひとつ目画像をセット
     setNewImagesInfo (newImages) {
